@@ -10,25 +10,21 @@ var sequelize = new Sequelize('development', null, null, {
 });
 
 var app = express();
-var port = process.env.PORT || 3000;
+var port = /*process.env.PORT || */3500;
 
 
 // parse application/json
 app.use(bodyParser.json());
-app.use(function(req, res, next) {
-   res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
-   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-   res.setHeader('Access-Control-Allow-Headers', 'Authorization, X-Requested-With, Content-Type');
-   next();
-});
+/*app.use(function(req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Authorization, X-Requested-With, Content-Type');
+    next();
+});*/
 
 /*
  * Models DEFINITIONS
  */
-
-/*let List = sequelize.define('lists', {
-    name: Sequelize.STRING,
-});*/
 
 // Card model
 var Card = sequelize.define('cards', {
@@ -37,8 +33,6 @@ var Card = sequelize.define('cards', {
     color: Sequelize.STRING,
     status: Sequelize.STRING
 });
-
-//List.hasMany(Card);
 
 // Task model
 var Task = sequelize.define('tasks', {
@@ -60,24 +54,12 @@ epilogue.initialize({
 });
 
 // Create REST resource
-/*let listResource = epilogue.resource({
-   model: List,
-   associations: true,
-   sort: {
-       param: 'orderby',
-       attributes: [ 'position' ]
-   },
-   endpoints: ['/lists', '/lists/:id'],
-});*/
-
-
 var cardResource = epilogue.resource({
     model: Card,
-    endpoints: ['/cards', '/cards/:id', '/cards/:id/tasks'],
+    endpoints: ['/cards', '/cards/:id'],
     associations: true,
     sort: {
-        param: 'orderby',
-        attributes: [ 'id' ]
+        default: '-updatedAt'
     }
 });
 
